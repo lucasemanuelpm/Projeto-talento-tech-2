@@ -1,38 +1,145 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="app-layout">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout</title>
+  <style>
+    /* Reset básico de margin e padding */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="myapp">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    body {
+      font-family: Arial, sans-serif;
+    }
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+    /* Estilos do AppBar */
+    .appbar {
+      background-color: #6200ea; /* Deep Purple */
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
 
-  <title>myapp</title>
-  <link rel="manifest" href="manifest.json">
+    .appbar h1 {
+      margin: 0;
+    }
+
+    /* Layout principal */
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* Layout superior */
+    .top-layout {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .top-layout p {
+      font-size: 24px;
+    }
+
+    /* Layout central com 3 colunas */
+    .middle-layout {
+      flex: 7;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .column {
+      flex: 1;
+    }
+
+    .center-column {
+      flex: 2;
+      background-color: #1976d2; /* Blue */
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      border: 1px solid black;
+      box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.45);
+    }
+
+    /* Layout inferior */
+    .bottom-layout {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bottom-layout p {
+      font-size: 24px;
+    }
+
+    /* Estilos para o botão flutuante */
+    .floating-button {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background-color: #6200ea;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+
+    .floating-button i {
+      font-size: 24px;
+    }
+
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+
+  <div class="appbar">
+    <h1>Programa Layout</h1>
+  </div>
+
+  <div class="container">
+
+    <!-- Layout superior -->
+    <div class="top-layout">
+      <p>Layout Superior</p>
+    </div>
+
+    <!-- Layout central com 3 colunas -->
+    <div class="middle-layout">
+      <div class="column"></div>
+      <div class="center-column">
+        <p>Meu Aplicativo</p>
+      </div>
+      <div class="column"></div>
+    </div>
+
+    <!-- Layout inferior -->
+    <div class="bottom-layout">
+      <p>Layout Inferior</p>
+    </div>
+
+  </div>
+
+  <!-- Botão flutuante -->
+  <button class="floating-button">
+    <i>+</i>
+  </button>
+
 </body>
 </html>
