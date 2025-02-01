@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo da Velha</title>
+  <title>Calculadora</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,144 +16,104 @@
       background-color: #f5f5f5;
     }
 
-    h1 {
+    .calculadora-container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+      width: 320px;
+      padding: 20px;
+    }
+
+    .display {
+      font-size: 24px;
+      text-align: right;
       margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      height: 60px;
+      overflow: hidden;
     }
 
-    .game-container {
+    .grid {
       display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 5px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
     }
 
-    .cell {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100px;
-      height: 100px;
-      font-size: 32px;
-      font-weight: bold;
-      color: #333;
-      background-color: #fff;
-      border: 2px solid #6200ee;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .cell:hover {
-      background-color: #eee;
-    }
-
-    .cell.taken {
-      cursor: not-allowed;
-    }
-
-    .message {
-      margin-top: 20px;
+    button {
+      padding: 15px;
       font-size: 18px;
-      color: #6200ee;
-    }
-
-    .restart-btn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #6200ee;
-      color: white;
+      font-weight: bold;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
+      background: #6200ee;
+      color: white;
       cursor: pointer;
       transition: background 0.2s;
     }
 
-    .restart-btn:hover {
-      background-color: #3700b3;
+    button:hover {
+      background: #3700b3;
+    }
+
+    .clear {
+      background: #e53935;
+    }
+
+    .clear:hover {
+      background: #b71c1c;
     }
   </style>
 </head>
 <body>
-  <h1>Jogo da Velha</h1>
-  <div class="game-container" id="gameContainer"></div>
-  <div class="message" id="message">Vez do jogador X</div>
-  <button class="restart-btn" onclick="restartGame()">Reiniciar Jogo</button>
+  <div class="calculadora-container">
+    <div id="display" class="display"></div>
+    <div class="grid">
+      <button onclick="pressButton('7')">7</button>
+      <button onclick="pressButton('8')">8</button>
+      <button onclick="pressButton('9')">9</button>
+      <button onclick="pressButton('/')">÷</button>
+      <button onclick="pressButton('4')">4</button>
+      <button onclick="pressButton('5')">5</button>
+      <button onclick="pressButton('6')">6</button>
+      <button onclick="pressButton('*')">x</button>
+      <button onclick="pressButton('1')">1</button>
+      <button onclick="pressButton('2')">2</button>
+      <button onclick="pressButton('3')">3</button>
+      <button onclick="pressButton('-')">-</button>
+      <button onclick="pressButton('0')">0</button>
+      <button onclick="pressButton('.')">.</button>
+      <button onclick="calculate()">=</button>
+      <button onclick="pressButton('+')">+</button>
+      <button class="clear" onclick="clearDisplay()">Limpar</button>
+    </div>
+  </div>
 
   <script>
-    const gameContainer = document.getElementById('gameContainer');
-    const message = document.getElementById('message');
-    let currentPlayer = 'X';
-    let gameBoard = Array(9).fill(null);
-    let gameActive = true;
+    let expression = "";
 
-    // Cria as células do jogo
-    function createBoard() {
-      gameContainer.innerHTML = '';
-      gameBoard.forEach((_, index) => {
-        const cell = document.createElement('div');
-        cell.classList.add('cell');
-        cell.setAttribute('data-index', index);
-        cell.addEventListener('click', handleCellClick);
-        gameContainer.appendChild(cell);
-      });
+    function pressButton(value) {
+      expression += value;
+      document.getElementById("display").innerText = expression;
     }
 
-    // Lida com o clique em uma célula
-    function handleCellClick(e) {
-      const cell = e.target;
-      const index = cell.getAttribute('data-index');
-
-      if (gameBoard[index] || !gameActive) {
-        return;
+    function calculate() {
+      try {
+        const result = eval(expression);
+        document.getElementById("display").innerText = result;
+        expression = result.toString(); // Atualiza a expressão com o resultado
+      } catch (error) {
+        document.getElementById("display").innerText = "Erro";
+        expression = "";
       }
-
-      gameBoard[index] = currentPlayer;
-      cell.textContent = currentPlayer;
-      cell.classList.add('taken');
-
-      if (checkWinner()) {
-        message.textContent = `Jogador ${currentPlayer} venceu!`;
-        gameActive = false;
-        return;
-      }
-
-      if (gameBoard.every(cell => cell)) {
-        message.textContent = 'Empate!';
-        gameActive = false;
-        return;
-      }
-
-      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      message.textContent = `Vez do jogador ${currentPlayer}`;
     }
 
-    // Verifica se há um vencedor
-    function checkWinner() {
-      const winningCombinations = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
-        [0, 4, 8], [2, 4, 6]            // Diagonais
-      ];
-
-      return winningCombinations.some(combination => {
-        const [a, b, c] = combination;
-        return gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c];
-      });
+    function clearDisplay() {
+      expression = "";
+      document.getElementById("display").innerText = "";
     }
-
-    // Reinicia o jogo
-    function restartGame() {
-      gameBoard = Array(9).fill(null);
-      currentPlayer = 'X';
-      gameActive = true;
-      message.textContent = 'Vez do jogador X';
-      createBoard();
-    }
-
-    // Inicializa o jogo
-    createBoard();
   </script>
 </body>
 </html>
-
